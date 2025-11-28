@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from models import ImageRequest, ReviewRequest, ClassificationResult
@@ -35,8 +35,8 @@ def classify_image(
         db.commit()
 
         return ClassificationResult(label=label, confidence=conf)
-    except: Exception as e:
-        raise HTTPEException(status_code=500, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/classify-review", response_model=ClassificationResult)
 def classify_review(
@@ -59,6 +59,6 @@ def classify_review(
         db.commit()
 
         return ClassificationResult(label=label, confidence=conf)
-        except: Exception as e: 
+    except Exception as e: 
         raise HTTPException(status_code=500, detail=str(e))
         
