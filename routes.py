@@ -5,7 +5,7 @@ from models import ImageRequest, ReviewRequest, ClassificationResult
 from semantic import SemanticReviewClassifier
 from imageclassifier import ImageClassifier
 
-#database + api nøgler
+# database + api keys
 from database import get_db, RequestLog
 from security import get_current_api_key
 
@@ -22,8 +22,10 @@ def classify_image(
     api_key: str = Depends(get_current_api_key),
 ):
     try:
+        # run image classifier
         label, conf = image_classifier.classify_image(req.image_base64)
-    # log i databasen (gemmer ikke hele billedet, kun output)
+
+        # log to database (we do NOT store the whole image, only output)
         log = RequestLog(
             api_key=api_key,
             endpoint="classify-image",
@@ -38,6 +40,7 @@ def classify_image(
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
+
 @router.post("/classify-review", response_model=ClassificationResult)
 def classify_review(
     req: ReviewRequest,
@@ -45,11 +48,10 @@ def classify_review(
     api_key: str = Depends(get_current_api_key),
 ):
     try:
-        label, conf = review_classifier.classify_review(req.text)
-        
-    label, conf = review_classifier.classify(req.text)
+        # use the .classify() method from SemanticReviewClassifier
+        label, conf = review_classifier.classify(req.text)
 
-    # log request+output
+        # log request + output
         log = RequestLog(
             api_key=api_key,
             endpoint="classify-review",
@@ -61,6 +63,5 @@ def classify_review(
         db.commit()
 
         return ClassificationResult(label=label, confidence=conf)
-    except Exception as e: 
+    except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-        
