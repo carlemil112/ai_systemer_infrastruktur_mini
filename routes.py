@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from models import ImageRequest, ReviewRequest, ClassificationResult
@@ -21,22 +21,22 @@ def classify_image(
     db: Session = Depends(get_db),
     api_key: str = Depends(get_current_api_key),
 ):
-
-    label, conf = image_classifier.classify_image(req.image_base64)
-
+    try:
+        label, conf = image_classifier.classify_image(req.image_base64)
     # log i databasen (gemmer ikke hele billedet, kun output)
-    log = RequestLog(
-        api_key=api_key,
-        endpoint="classify-image",
-        input_text=None,
-        predicted_label=label,
-        confidence=conf,
-    )
-    db.add(log)
-    db.commit()
+        log = RequestLog(
+            api_key=api_key,
+            endpoint="classify-image",
+            input_text=None,
+            predicted_label=label,
+            confidence=conf,
+        )
+        db.add(log)
+        db.commit()
 
-    return ClassificationResult(label=label, confidence=conf)
-
+        return ClassificationResult(label=label, confidence=conf)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 @router.post("/classify-review", response_model=ClassificationResult)
 def classify_review(
@@ -44,17 +44,23 @@ def classify_review(
     db: Session = Depends(get_db),
     api_key: str = Depends(get_current_api_key),
 ):
+    try:
+        label, conf = review_classifier.classify_review(req.text)
+        
     label, conf = review_classifier.classify(req.text)
 
     # log request+output
-    log = RequestLog(
-        api_key=api_key,
-        endpoint="classify-review",
-        input_text=req.text,
-        predicted_label=label,
-        confidence=conf,
-    )
-    db.add(log)
-    db.commit()
+        log = RequestLog(
+            api_key=api_key,
+            endpoint="classify-review",
+            input_text=req.text,
+            predicted_label=label,
+            confidence=conf,
+        )
+        db.add(log)
+        db.commit()
 
-    return ClassificationResult(label=label, confidence=conf)
+        return ClassificationResult(label=label, confidence=conf)
+    except Exception as e: 
+        raise HTTPException(status_code=500, detail=str(e))
+        
