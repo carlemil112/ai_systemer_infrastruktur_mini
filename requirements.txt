@@ -1,0 +1,6 @@
+fastapi
+pillow
+sqlalchemy
+pydantic
+uvicorn[standard]
+python-dotenv

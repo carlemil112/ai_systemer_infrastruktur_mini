@@ -1,4 +1,3 @@
-# security.py
 from fastapi import HTTPException, Security
 from fastapi.security import APIKeyHeader
 from starlette.status import HTTP_401_UNAUTHORIZED
@@ -19,3 +18,4 @@ async def get_current_api_key(api_key: str = Security(API_KEY_HEADER)) -> str:
         status_code=HTTP_401_UNAUTHORIZED,
         detail="Invalid or missing API key",
     )
+

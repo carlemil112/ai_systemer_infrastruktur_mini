@@ -44,7 +44,7 @@ def classify_review(
     db: Session = Depends(get_db),
     api_key: str = Depends(get_current_api_key),
 ):
-    label, conf = review_classifier.classify_review(req.text)
+    label, conf = review_classifier.classify(req.text)
 
     # log request+output
     log = RequestLog(
