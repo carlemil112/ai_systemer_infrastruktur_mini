@@ -1,9 +1,15 @@
-#dummy
+from transformers import pipeline
+
 class SemanticReviewClassifier:
     def __init__(self):
-        self.labels = ["Good", "Bad"]
+        self.model = pipeline("sentiment-analysis")
 
-    def classify(self, image_base64: str):
-        if "good" in image_base64.lower():
-            return "Good", 0.95
-        return "unknown", 0.10
+    def classify(self, text: str):
+
+        try:
+            result = self.model(text)[0]
+            label = result["label"]
+            confidence = float(result["score"])
+            return label, confidence
+        except Exception:
+            return "invalid_text", 0.0
