@@ -1,6 +1,7 @@
 import requests
 import json
 from PIL import Image
+import base64
 
 #Hvor serveren kører (localthost)
 BASE_URL = "http://localhost:8000"
@@ -26,24 +27,25 @@ def list_models():
 
     except Exception as e:
         print("Kunne ikke forbinde til serveren:", e)
-def text_similarity():
-    """Sender to tekster til API'et og printer similarity-score."""
-    text1 = input("\nIndtast tekst 1: ")
-    text2 = input("Indtast tekst 2: ")
 
-    payload = {"text1": text1, "text2": text2}
+def classify_review():
+    """Vurderer om en anmeldelse er positiv eller negativ"""
+    text = input("\nSkriv din anmeldelse her: ")
+    payload = {"text": text}
 
     try:
         response = requests.post(
-            f"{BASE_URL}/v1/text_similarity",
+            f"{BASE_URL}/v1/classify-review",
             json=payload,
             headers=HEADERS,
         )
 
         if response.status_code == 200:
             data = response.json()
-            score = data.get("similarity")
-            print(f"\nSimilarity score: {score}")
+            label = data.get("label")
+            confidence = data.get("confidence")
+            print(f"\nSentiment: {label}")
+            print(f"Confidence: {confidence}")
         else:
             print("Fejl fra serveren:", response.status_code, response.text)
     except Exception as e:
@@ -54,12 +56,14 @@ def classify_image():
 
     try:
         with open(path, "rb") as f:
-            files = {"file": f}
-            response = requests.post(
-                f"{BASE_URL}/v1/image_classify",
-                files=files,
-                headers=HEADERS,
-            )
+            image_base64 = base64.b64encode(f.read()).decode("utf-8")
+        payload = {"image_base64": image_base64}
+        response = requests.post(
+            f"{BASE_URL}/v1/classify-image", 
+            json=payload,
+            headers=HEADERS,
+        )
+
 
         if response.status_code == 200:
             data = response.json()
@@ -78,7 +82,7 @@ def classify_image():
 def print_menu():
     print("\n--- AI Client Program ---")
     print("1. List tilgængelige modeller")
-    print("2. Beregn tekst-similaritet")
+    print("2. Klassificer tekst")
     print("3. Klassificér billede")
     print("4. Afslut")
 
@@ -91,7 +95,7 @@ def main():
         if choice == "1":
             list_models()
         elif choice == "2":
-            text_similarity()
+            classify_review()
         elif choice == "3":
             classify_image()
         elif choice == "4":
