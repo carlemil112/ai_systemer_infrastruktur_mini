@@ -14,6 +14,14 @@ router = APIRouter(prefix="/v1")
 review_classifier = SemanticReviewClassifier()
 image_classifier = ImageClassifier()
 
+@router.get("/models")
+def list_models(api_key: str = Depends(get_current_api_key)):
+    return {
+        "models": [
+            "sentiment-analysis",
+            "image-classification"
+        ]
+    }
 
 @router.post("/classify-image", response_model=ClassificationResult)
 def classify_image(
