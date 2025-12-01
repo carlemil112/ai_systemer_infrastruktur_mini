@@ -4,7 +4,7 @@ from PIL import Image
 import base64
 
 #Hvor serveren kører (localthost)
-BASE_URL = "http://172.20.10.2:8000"
+BASE_URL = "http://10.27.12.29:8000"
 #Hvordan den logger ind på serveren (her med en API-nøgle)
 API_KEY = "secret123" 
 #Hvad den sender med hver forespørgsel til serveren
