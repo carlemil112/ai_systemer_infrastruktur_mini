@@ -1,6 +1,6 @@
 from transformers import pipeline
 
-class SemanticReviewClassifier:
+class SemanticClassifier:
     def __init__(self):
         self.model = pipeline("sentiment-analysis")
 
