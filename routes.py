@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-from models import ImageRequest, ReviewRequest, ClassificationResult
+from models import ImageRequest, SemanticRequest, ClassificationResult, Top5Results
 from semantic import SemanticClassifier
 from imageclassifier import ImageClassifier
 
@@ -52,7 +52,7 @@ def classify_image(
 
 @v1.post("/semantic", response_model=ClassificationResult)
 def classify_semantic(
-    req: ReviewRequest,
+    req: SemanticRequest,
     db: Session = Depends(get_db),
     api_key: str = Depends(get_current_api_key),
 ):
@@ -85,7 +85,7 @@ def classify_image_v2(
        
         result = image_classifier.classify_top5(req.image_base64)
 
-        # log to database (we do NOT store the whole image, only output)
+        
         log = RequestLog(
             api_key=api_key,
             endpoint="images_v2",
