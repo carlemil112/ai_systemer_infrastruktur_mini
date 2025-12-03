@@ -2,7 +2,11 @@ from transformers import pipeline
 
 class SemanticReviewClassifier:
     def __init__(self):
-        self.model = pipeline("sentiment-analysis")
+        self.model = pipeline(
+            "sentiment-analysis",
+            model="distilbert/distilbert-base-uncased"
+)
+
 
     def classify(self, text: str):
 

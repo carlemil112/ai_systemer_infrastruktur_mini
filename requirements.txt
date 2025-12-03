@@ -6,4 +6,3 @@ uvicorn[standard]
 python-dotenv
 transformers
 torch
-sqlite3
