@@ -3,6 +3,7 @@ from PIL import Image
 import torch
 import base64
 import io
+from typing import List
 
 class ImageClassifier:
     def __init__(self):
