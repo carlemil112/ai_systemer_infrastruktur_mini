@@ -73,7 +73,7 @@ def classify_image():
             if confidence is not None:
                 print("Confidence:", confidence)
         else:
-            print("Fejl fra serveren:", response.status_code, response.text)
+            print("Server error:", response.status_code, response.text)
 
     except FileNotFoundError:
         print("Billedet blev ikke fundet – tjek stien.")
@@ -81,16 +81,16 @@ def classify_image():
         print("Kunne ikke forbinde til serveren:", e)
 def print_menu():
     print("\n--- AI Client Program ---")
-    print("1. List tilgængelige modeller")
-    print("2. Klassificer tekst")
-    print("3. Klassificér billede")
-    print("4. Afslut")
+    print("1. List available models")
+    print("2. Classify text")
+    print("3. Classify image")
+    print("4. End client")
 
 
 def main():
     while True:
         print_menu()
-        choice = input("\nVælg en funktion (1-4): ")
+        choice = input("\nChoose a function (1-4): ")
 
         if choice == "1":
             list_models()
@@ -99,10 +99,10 @@ def main():
         elif choice == "3":
             classify_image()
         elif choice == "4":
-            print("Afslutter klienten...")
+            print("Ending client...")
             break
         else:
-            print("Ugyldigt valg – prøv igen.")
+            print("Invalid – try again.")
 
 
 if __name__ == "__main__":
