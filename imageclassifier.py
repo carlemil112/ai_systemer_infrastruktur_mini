@@ -35,7 +35,7 @@ class ImageClassifier:
         return self.classify(image_base64)
 
     def classify_top5(self, image_base64: str):
-        """Return top-5 predictions instead of only 1."""
+       
 
         try:
             image_bytes = base64.b64decode(image_base64)
