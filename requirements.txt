@@ -1,8 +1,10 @@
 fastapi
-pillow
+uvicorn[standard]
 sqlalchemy
 pydantic
-uvicorn[standard]
+pillow
+requests
 python-dotenv
+python-multipart
 transformers
 torch
