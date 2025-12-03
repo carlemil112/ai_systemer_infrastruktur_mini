@@ -13,7 +13,7 @@ HEADERS = {
 }
 
 def list_models():
-    """Henter og printer de modeller, som serveren stiller til rådighed."""
+    """Prints the available models."""
     try:
         response = requests.get(f"{BASE_URL}/v1/models", headers=HEADERS)
 
@@ -23,14 +23,14 @@ def list_models():
             for model in data.get("models", []):
                 print(" -", model)
         else:
-            print("Fejl fra serveren:", response.status_code, response.text)
+            print("Server mistake:", response.status_code, response.text)
 
     except Exception as e:
-        print("Kunne ikke forbinde til serveren:", e)
+        print("Couldn't connect to the server:", e)
 
 def classify_review():
-    """Vurderer om en anmeldelse er positiv eller negativ"""
-    text = input("\nSkriv din anmeldelse her: ")
+    """Semtiment of a comment"""
+    text = input("\nLeave a comment: ")
     payload = {"text": text}
 
     try:
@@ -49,10 +49,10 @@ def classify_review():
         else:
             print("Fejl fra serveren:", response.status_code, response.text)
     except Exception as e:
-        print("Kunne ikke forbinde til serveren:", e)
+        print("Couldn't connect to the server", e)
 def classify_image():
     """Uploader et billede til API'et og printer klassifikationen."""
-    path = input("\nSti til billede (fx images/happy.jpg): ")
+    path = input("\nPath to image: ")
 
     try:
         with open(path, "rb") as f:
