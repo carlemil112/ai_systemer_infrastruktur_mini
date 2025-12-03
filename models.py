@@ -9,3 +9,13 @@ class ReviewRequest(BaseModel):
 class ClassificationResult(BaseModel):
     label: str
     confidence: float
+
+class Top5Prediction(BaseModel):
+    label: str
+    confidence: float
+
+
+class Top5Result(BaseModel):
+    model: str        
+    top_k: int        
+    predictions: List[Top5Prediction]
