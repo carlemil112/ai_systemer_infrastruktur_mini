@@ -1,9 +1,10 @@
 from pydantic import BaseModel
+from typing import List
 
 class ImageRequest(BaseModel):
     image_base64: str
 
-class ReviewRequest(BaseModel):
+class SemanticRequest(BaseModel):
     text: str
 
 class ClassificationResult(BaseModel):
@@ -15,7 +16,7 @@ class Top5Prediction(BaseModel):
     confidence: float
 
 
-class Top5Result(BaseModel):
+class Top5Results(BaseModel):
     model: str        
     top_k: int        
     predictions: List[Top5Prediction]
