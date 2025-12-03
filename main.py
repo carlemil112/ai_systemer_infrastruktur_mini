@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from routes import router
+from routes import v1, v2
 from database import init_db #database import
 
 
@@ -9,7 +9,9 @@ app = FastAPI(
 )
 
 init_db() #sørger for tabeller i databaase findes
-app.include_router(router)
+
+app.include_router(v1)
+app.include_router(v2)
                
 @app.get("/")
 def root():
