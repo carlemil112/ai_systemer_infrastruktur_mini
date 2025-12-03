@@ -35,7 +35,7 @@ def classify_review():
 
     try:
         response = requests.post(
-            f"{BASE_URL}/v1/classify-review",
+            f"{BASE_URL}/v1/semantic",
             json=payload,
             headers=HEADERS,
         )
@@ -59,7 +59,7 @@ def classify_image():
             image_base64 = base64.b64encode(f.read()).decode("utf-8")
         payload = {"image_base64": image_base64}
         response = requests.post(
-            f"{BASE_URL}/v1/classify-image", 
+            f"{BASE_URL}/v1/images", 
             json=payload,
             headers=HEADERS,
         )
@@ -79,18 +79,45 @@ def classify_image():
         print("Billedet blev ikke fundet – tjek stien.")
     except Exception as e:
         print("Kunne ikke forbinde til serveren:", e)
+def classify_image_top5():
+    path = input("\nPath to image: ")
+
+    try:
+        with open(path, "rb") as f:
+            image_base64 = base64.b64encode(f.read()).decode("utf-8")
+
+        payload = {"image_base64": image_base64}
+        response = requests.post(
+            f"{BASE_URL}/v2/images", 
+            json=payload,
+            headers=HEADERS,
+        )
+
+        if response.status_code == 200:
+            data = response.json()
+            print("\nTop-5 predictions:\n")
+            for p in data.get("predictions", []):
+                print(f" - {p['label']} ({p['confidence']:.4f})")
+        else:
+            print("Server error:", response.status_code, response.text)
+    except FileNotFoundError:
+        print("Image not found — check the file path.")
+    except Exception as e:
+        print("Couldn't connect to server:", e)
+
 def print_menu():
     print("\n--- AI Client Program ---")
     print("1. List available models")
     print("2. Classify text")
     print("3. Classify image")
-    print("4. End client")
+    print("4. Classify image with top 5")
+    print("5. End client")
 
 
 def main():
     while True:
         print_menu()
-        choice = input("\nChoose a function (1-4): ")
+        choice = input("\nChoose a function (1-5): ")
 
         if choice == "1":
             list_models()
@@ -99,6 +126,8 @@ def main():
         elif choice == "3":
             classify_image()
         elif choice == "4":
+            classify_image_top5()
+        elif choice == "5":
             print("Ending client...")
             break
         else:
