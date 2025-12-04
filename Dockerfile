@@ -4,6 +4,9 @@ FROM python:3.11-slim
 # Put the working directory inside the container
 WORKDIR /app
 
+# Install sqlite3 CLI
+RUN apt-get update && apt-get install -y sqlite3
+
 # Requirements for server 
 COPY requirements.txt .
 
