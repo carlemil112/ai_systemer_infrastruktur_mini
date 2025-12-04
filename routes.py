@@ -1,20 +1,25 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-
+# Request and reponse models
 from models import ImageRequest, SemanticRequest, ClassificationResult, Top5Results
+
+# Classifiers
 from semantic import SemanticClassifier
 from imageclassifier import ImageClassifier
 
-# database + api keys
+# Database + api keys
 from database import get_db, RequestLog
 from security import get_current_api_key
 
+# API endpoints version 1 and 2
 v1 = APIRouter(prefix="/v1")
 v2 = APIRouter(prefix="/v2")
 
+# Loads the classifiers 
 semantic_classifier = SemanticClassifier()
 image_classifier = ImageClassifier()
 
+# Returns list of available models
 @v1.get("/models")
 def list_models(api_key: str = Depends(get_current_api_key)):
     return {
@@ -31,10 +36,10 @@ def classify_image(
     api_key: str = Depends(get_current_api_key),
 ):
     try:
-        # run image classifier
+        # Runs image classifier
         label, conf = image_classifier.classify_image(req.image_base64)
 
-        # log to database (we do NOT store the whole image, only output)
+        # Store request output in the database
         log = RequestLog(
             api_key=api_key,
             endpoint="images",
@@ -57,10 +62,10 @@ def classify_semantic(
     api_key: str = Depends(get_current_api_key),
 ):
     try:
-        # use the .classify() method from SemanticReviewClassifier
+        # Run semantic classifier
         label, conf = semantic_classifier.classify(req.text)
 
-        # log request + output
+        # Store text, label and confidence in the database
         log = RequestLog(
             api_key=api_key,
             endpoint="semantic",
@@ -82,10 +87,10 @@ def classify_image_v2(
     api_key: str = Depends(get_current_api_key),
 ):
     try:
-       
+       # Run top-5 image classification 
         result = image_classifier.classify_top5(req.image_base64)
 
-        
+        # Stores the predicted list in the database
         log = RequestLog(
             api_key=api_key,
             endpoint="images_v2",
