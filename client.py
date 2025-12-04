@@ -5,9 +5,9 @@ import base64
 
 #Where the server runs
 BASE_URL = "https://maximus-semidivided-annalise.ngrok-free.dev"
-#How it logs into the server (here with an API key)
+#How it logs into the server 
 API_KEY = "secret123" 
-#What it sends with each request to the server
+#What it sends with each request
 HEADERS = {
     "x-api-key": API_KEY,
 }
@@ -24,7 +24,7 @@ def list_models():
             for model in data.get("models", []):
                 print(" -", model)
         else:
-            print("Server mistake:", response.status_code, response.text)
+            print("Server error:", response.status_code, response.text)
 
     except Exception as e:
         print("Couldn't connect to the server:", e)
