@@ -1,3 +1,4 @@
+#Based on Huggin Faces example for microsoft/resnet-18 and adapted using ChatGPT: 
 from transformers import AutoImageProcessor, AutoModelForImageClassification
 from PIL import Image
 import torch
