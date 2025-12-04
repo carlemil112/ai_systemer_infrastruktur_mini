@@ -25,7 +25,8 @@ def list_models(api_key: str = Depends(get_current_api_key)):
     return {
         "models": [
             "sentiment-analysis",
-            "image-classification"
+            "image-classification",
+            "image-classification-top5"
         ]
     }
 
