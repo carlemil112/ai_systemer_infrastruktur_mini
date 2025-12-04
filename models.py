@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import List
 
-# Rewuest model for image classification 
+# Request model for image classification 
 class ImageRequest(BaseModel):
     image_base64: str
 # Request model for semantic classification 

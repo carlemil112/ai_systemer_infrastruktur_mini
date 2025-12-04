@@ -20,7 +20,7 @@ def list_models():
 
         if response.status_code == 200:
             data = response.json()
-            print("\nAvailable modeller:")
+            print("\nAvailable models:")
             for model in data.get("models", []):
                 print(" -", model)
         else:
