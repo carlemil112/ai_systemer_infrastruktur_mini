@@ -5,9 +5,9 @@ import base64
 
 #Where the server runs
 BASE_URL = "https://maximus-semidivided-annalise.ngrok-free.dev"
-#How it logs into the server (here with an API key)
+#How it logs into the server 
 API_KEY = "secret123" 
-#What it sends with each request to the server
+#What it sends with each request
 HEADERS = {
     "x-api-key": API_KEY,
 }
@@ -20,11 +20,11 @@ def list_models():
 
         if response.status_code == 200:
             data = response.json()
-            print("\nTilgængelige modeller:")
+            print("\nAvailable modeller:")
             for model in data.get("models", []):
                 print(" -", model)
         else:
-            print("Server mistake:", response.status_code, response.text)
+            print("Server error:", response.status_code, response.text)
 
     except Exception as e:
         print("Couldn't connect to the server:", e)
@@ -48,11 +48,11 @@ def classify_review():
             print(f"\nSentiment: {label}")
             print(f"Confidence: {confidence}")
         else:
-            print("Fejl fra serveren:", response.status_code, response.text)
+            print("Server Error:", response.status_code, response.text)
     except Exception as e:
         print("Couldn't connect to the server", e)
 def classify_image():
-    """Uploader et billede til API'et og printer klassifikationen."""
+    # Uploades an image and prints the classification 
     path = input("\nPath to image: ")
 
     try:
@@ -77,9 +77,9 @@ def classify_image():
             print("Server error:", response.status_code, response.text)
 
     except FileNotFoundError:
-        print("Billedet blev ikke fundet – tjek stien.")
+        print("Image not found - check the file path")
     except Exception as e:
-        print("Kunne ikke forbinde til serveren:", e)
+        print("Couldn't connect to server:", e)
 def classify_image_top5():
     path = input("\nPath to image: ")
 
