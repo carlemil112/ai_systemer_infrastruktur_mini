@@ -3,14 +3,15 @@ import json
 from PIL import Image
 import base64
 
-#Hvor serveren kører (localthost)
+#Where the server runs
 BASE_URL = "https://maximus-semidivided-annalise.ngrok-free.dev"
-#Hvordan den logger ind på serveren (her med en API-nøgle)
+#How it logs into the server (here with an API key)
 API_KEY = "secret123" 
-#Hvad den sender med hver forespørgsel til serveren
+#What it sends with each request to the server
 HEADERS = {
     "x-api-key": API_KEY,
 }
+
 
 def list_models():
     """Prints the available models."""
